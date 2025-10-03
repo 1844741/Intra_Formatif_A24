@@ -6,39 +6,56 @@
 
 <h1>Formulaire qui sert à rien</h1>
 <mat-card style="width: 700px; margin: auto; padding: 20px;">
-  <form >
+  <form [formGroup]="formGroup">
 
     <mat-form-field style="width: 100%">
         <mat-label>Nom</mat-label>
-        <input matInput type="text" placeholder="Nom et prénom" name="name" >
-        
+        <input matInput type="text" placeholder="Nom et prénom" name="nom" formControlName="nom">
+        @if (formGroup.get('nom')?.hasError('required')) {
+          <mat-error>Le nom est requis.</mat-error>
+        }
     </mat-form-field>
 
     <mat-form-field style="width: 100%">
       <mat-label>Numéro de rue</mat-label>
-      <input matInput type="number" placeholder="5230" name="roadnumber">
-      
+      <input matInput type="number" placeholder="5230" name="roadnumber" formControlName="roadnumber">
+      @if (!formGroup.get('roadnumber')?.hasError('required') && (formGroup.get('roadnumber')?.hasError('min') || formGroup.get('roadnumber')?.hasError('max'))) {
+        <mat-error>Le numéro de rue doit être entre 1000 et 9999.</mat-error>
+      }
+      @if (formGroup.get('roadnumber')?.hasError('required')) {
+        <mat-error>Le numéro de rue est requis.</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field style="width: 100%">
         <mat-label>Rue</mat-label>
-        <input matInput type="text" placeholder="Resther" name="rue">
+        <input matInput type="text" placeholder="Resther" name="rue" formControlName="rue">
+      @if (formGroup.get('rue')?.hasError('required')) {
+        <mat-error>La rue est requise.</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field style="width: 100%">
       <mat-label>Code Postal</mat-label>
-      <input matInput type="text" placeholder="H2J8B2" name="postalcode">
-      
+      <input matInput type="text" placeholder="H2J8B2" name="postalcode" formControlName="postalcode">
+      @if (!formGroup.get('postalcode')?.hasError('required') && formGroup.get('postalcode')?.hasError('pattern')) {
+        <mat-error>Le format du code postal doit être ainsi: X1X1X1</mat-error>
+      }
+      @if (formGroup.get('postalcode')?.hasError('required')) {
+        <mat-error>Le code postal est requis.</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field style="width: 100%">
       <mat-label>Commentaire</mat-label>
-      <textarea matInput placeholder="Votre commentaire" name="comments"></textarea>
-      
+      <textarea matInput placeholder="Votre commentaire" name="comments" formControlName="comments"></textarea>
+      @if (formGroup.get('comments')?.hasError('minMots')) {
+        <mat-error>Le nombre minimal de mots est de 10.</mat-error>
+      }
     </mat-form-field>
 
     <mat-card-actions align="end">
-      <button  mat-raised-button color="primary" >Acheter</button>
+      <button  mat-raised-button color="primary" [disabled]="!formGroup.valid">Acheter</button>
     </mat-card-actions>
   </form>
 </mat-card>
